@@ -45,6 +45,8 @@ const store = createStore({
     },
     actions: {
         addMemory(context, memoryData){
+            // would be the place to send data to a server
+            // or any other additional work
             context.commit('addMemory', memoryData)
         },
     },

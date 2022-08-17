@@ -1,0 +1,6 @@
+{
+  "appId": "com.splashbrand.chitra",
+  "appName": "lister-test",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

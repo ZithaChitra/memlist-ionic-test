@@ -1,6 +1,6 @@
 <template>
     <base-layout page-title="Add a Memory" pageDefaultBackLink="/memories">
-        <create-memory-form></create-memory-form>
+        <create-memory-form @save-memory="saveMemory"></create-memory-form>
     </base-layout>    
 </template>
 
@@ -16,7 +16,8 @@ export default {
     },
     methods: {
         saveMemory(memoryData){
-            this.$store.dispatch('addMemory', memoryData)
+            this.$store.dispatch('addMemory', memoryData) // dispatch addMemory action
+            this.$router.replace('/memories')
         }
     } 
 }

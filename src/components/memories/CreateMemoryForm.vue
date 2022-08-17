@@ -1,21 +1,25 @@
 <template>
-    <form class="ion-padding">
+    <form class="ion-padding" @submit.prevent="submitForm">
         <ion-list>
             <ion-item>
                 <ion-label position="floating">Title</ion-label>
-                <ion-input type="text" required/>
+                <ion-input type="text" required v-model="enteredTitle"/>
             </ion-item>
             <ion-item>
-                <ion-label position="floating">Image URL</ion-label>
-                <ion-input type="url" required/>
+                <ion-thumbnail slot="start">
+                    <img :src="previewImageUrl" alt="" />
+                </ion-thumbnail>
+                <ion-button type="button" fill="clear" @click="takePhoto">
+                    <ion-icon slot="start" :icon="camera"></ion-icon>
+                    Take Photo
+                </ion-button>
             </ion-item>
             <ion-item>
                 <ion-label position="floating">Desciption</ion-label>
-                <ion-textarea rows="5"></ion-textarea>
+                <ion-textarea rows="5" v-model="enteredDescription"></ion-textarea>
             </ion-item>
-            
         </ion-list>
-        <ion-button expand="full">Save</ion-button>
+        <ion-button type="submit" expand="full">Save</ion-button>
     </form>
 </template>
 
@@ -27,19 +31,48 @@ import {
     IonItem,
     IonLabel,
     IonInput,
-    IonTextarea, IonButton
+    IonTextarea, IonButton, IonThumbnail, IonIcon
 } from '@ionic/vue'
+import { camera } from 'ionicons/icons'
+import { Camera, CameraResultType } from '@capacitor/camera'
 
 export default {
-
-    props: [],
-    
+    emits: ['save-memory'],
     components: {
         IonList,
         IonItem,
         IonLabel,
         IonInput,
-        IonTextarea, IonButton
-    }, 
+        IonTextarea, IonButton, IonThumbnail, IonIcon
+    },
+    data(){
+        return {
+            enteredTitle: '',
+            enteredImageUrl: '',
+            enteredDescription: '',
+            previewImageUrl: null,
+            camera,
+        }
+    },
+    methods: {
+        submitForm(){
+            const memoryData = {
+                title: this.enteredTitle,
+                imageUrl: this.enteredImageUrl,
+                description: this.enteredDescription
+            } 
+            this.$emit('save-memory', memoryData)
+        },
+
+        async takePhoto(){
+            const photo = await Camera.getPhoto({
+                result: CameraResultType.Uri,
+                quality: 90,
+            })
+            this.previewImageUrl = photo.webPath
+
+
+        },
+    }
 }
 </script>
